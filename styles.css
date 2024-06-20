@@ -1,0 +1,145 @@
+* {
+    font-family: "Inter", sans-serif;
+    font-size: 1em;
+}
+
+body {
+    background-color: gray;
+}
+
+.content {
+    height: 100%;
+    background-color: white;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.content .top {
+    height: 50px;
+}
+
+.content .middle_ {
+    padding: 10px 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-bottom: 5px solid #b7b2b2;
+    border-top: 5px solid #b7b2b2;
+
+}
+
+.content .middle .question>span:first-child {
+    font-size: 1.2em;
+    padding: 7px;
+    margin: 7px;
+}
+
+span.option {
+    display: block;
+    border: 0px solid gray;
+    margin: 7px;
+    padding: 7px;
+    border-radius: 4px;
+    background-color: #ebf3ff;
+}
+
+.que-text {
+    margin: 10px;
+}
+
+div.options {
+    margin-top: 20px;
+}
+
+.content .middle .option.selected.correct,
+span.option.correct-ans {
+    background-color: #b6ebb6;
+    border: 0px solid green;
+}
+
+.content .middle .option.selected.wrong,
+span.option.wrong-ans {
+    background-color: #efaab1;
+    border: 0px solid red;
+}
+
+.hide {
+    display: none !important;
+}
+
+.que-tags {
+    border-top: 1px solid rgb(176, 176, 176);
+    margin: 5px;
+    margin-top: 32px;
+    padding: 10px;
+}
+
+span.question {
+    margin: 7px;
+    padding: 7px;
+    display: inline-block;
+    width: 92%;
+}
+
+.content .bottom {
+    height: 50px;
+    display: flex;
+    align-content: center;
+    margin-top: 50px;
+}
+
+
+
+button.new-question {
+    border-radius: 5px;
+    width: 100%;
+    margin: 0px 15px;
+    background-color: #3668e9;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+}
+
+button.new-question:hover {
+    background-color: #4f37da;
+}
+
+
+
+.me-cp {
+    cursor: pointer;
+}
+
+.option.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+
+
+
+.tags {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.tag {
+    margin: 4px;
+    border: 0px solid gray;
+    padding: 3px 10px;
+    background-color: #e6e6e6;
+    color: #8383e0;
+    border-radius: 17px;
+    display: inline-block;
+    margin-right: 5px;
+}

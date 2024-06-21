@@ -19,6 +19,7 @@ body {
     transform: translate(-50%, -50%);
 }
 
+
 .content div.top {
     height: 50px;
     margin-top: 10px;
@@ -58,11 +59,46 @@ div.middle {
     padding-bottom: 21px;
 }
 
-#date-picker {
-    width: 33px;
+.sd-container {
+    position: relative;
+    float: left;
+}
+
+.sd {
+    padding: 5px 10px;
+    height: 30px;
+    width: 150px;
+}
+
+.open-button {
+    position: absolute;
+    top: 10px;
+    right: 11px;
+    width: 25px;
+    height: 25px;
+    background: #fff;
+    pointer-events: none;
+}
+
+.open-button button {
     border: none;
-    font-size: 29px;
-    margin-left: 13px;
+    background: transparent;
+    font-size: 24px;
+}
+
+#date-picker {
+    width: 25px;
+    border: none;
+    margin-bottom: 15px;
+    /*font-size: 29px;
+    margin-left: 13px;*/
+}
+
+#date-picker:focus {
+    outline: none;
+    /* Remove the default outline that appears on focus */
+    border: none;
+    /* Ensure the border remains none on focus */
 }
 
 .que-text {

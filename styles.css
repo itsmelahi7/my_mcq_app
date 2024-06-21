@@ -92,6 +92,7 @@ div.middle {
     margin-bottom: 15px;
     /*font-size: 29px;
     margin-left: 13px;*/
+    background-color: transparent;
 }
 
 #date-picker:focus {

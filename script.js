@@ -140,12 +140,13 @@ function setAutoComplete(event, arr, type, target) {
 
             item.addEventListener("click", (event) => {
                 var tar = input.parentElement;
+                if (type == "search-filter-tag") tar = document.querySelector(".filtered-tags .tags");
                 var tag = event.target.textContent.trim();
                 var div = document.createElement("div");
                 div.className = "tag";
                 div.innerHTML = `<span class="name">${tag}</span>
                      <span class="remove-tag">x</span>`;
-                tar.insertBefore(div, input);
+                tar.insertBefore(div, tar.lastChild);
 
                 if (type == "search-filter-tag") {
                     //handleFilterTag(input, tag);

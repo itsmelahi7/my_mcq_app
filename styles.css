@@ -264,6 +264,17 @@ span.check-ans {
     /* Changes the cursor to a pointer when hovering over the icon */
 }
 
+.remove-tag {
+    cursor: pointer;
+}
+
+.filtered-tags {
+    display: block;
+    padding-bottom: 18px;
+    margin: 0px 20px;
+}
+
+
 span.all-tags {
     min-width: 100px;
     margin: 10px;

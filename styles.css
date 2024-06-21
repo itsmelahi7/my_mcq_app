@@ -268,6 +268,19 @@ span.check-ans {
     cursor: pointer;
 }
 
+.me-popup-alert {
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #F6DDCC;
+    padding: 7px 40px;
+    border-radius: 3px;
+    width: 70%;
+    text-align: center;
+    width: fit-content;
+}
+
 .filtered-tags {
     display: block;
     padding-bottom: 18px;
@@ -304,7 +317,8 @@ span.all-tags {
 .search-filter input {
     border: 1px solid gray;
     padding: 5px;
-    border-radius: 6px;
+    border-radius: 26px;
     display: flex;
     align-items: center;
+    text-align: center;
 }

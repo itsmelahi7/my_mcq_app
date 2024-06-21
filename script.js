@@ -5,6 +5,7 @@ var curr_que = 0;
 var que_mode = "mcq";
 var new_ques = [];
 var new_que_tags = ["apple", "banana", "cat"];
+var me_admin = false;
 
 //me_data = getDataFromLocale("myData");
 me_data = getDataFromGit();
@@ -20,6 +21,8 @@ function initialLoading() {
     new_que_tags = all_tags;
     new_ques = getDataFromLocale("new_ques");
     loadAllFilterTags();
+    saveDataInLocale("me_admin", true);
+    me_admin = getDataFromLocale("me_admin");
 }
 
 document.querySelector("button.update-gist").addEventListener("click", () => {
@@ -154,7 +157,7 @@ function setAutoComplete(event, arr, type, target) {
                     div.children[1].addEventListener("click", (event) => {
                         div.remove();
 
-                        filterQuestionsOnTagBased();
+                        filterQuestionsOnTagBased("cross");
                     });
                 } else if (type == "search-image") {
                     handleSelectedSearchImage(input, tag);
@@ -467,21 +470,28 @@ async function updateMyMcqAppGistFile() {
 
 function filterQuestionsOnTagBased(input, tag) {
     if (tag) {
-        var tar = input.parentElement;
+        var tar = document.querySelectorAll(".filtered-tags .tags");
         var div = document.createElement("div");
         div.className = "tag";
         div.innerHTML = `<span class="name">${tag}</span>
                      <span class="remove-tag">x</span>`;
-        tar.insertBefore(div, input);
+        tar[0].appendChild(div);
         div.children[1].addEventListener("click", (event) => {
             div.remove();
-
             filterQuestionsOnTagBased("cross");
         });
     }
 
-    const nameElements = document.querySelectorAll(".search-filter .tag .name");
+    //const nameElements = document.querySelectorAll(".search-filter .tag .name");
+    const nameElements = document.querySelectorAll(".filtered-tags .tag .name");
     const filter_tags = Array.from(nameElements).map((element) => element.textContent.trim());
+    var filtered_tags_ele = document.querySelector(".filtered-tags");
+    debugger;
+    if (filter_tags.length == 0) {
+        filtered_tags_ele.classList.add("hide");
+    } else {
+        filtered_tags_ele.classList.remove("hide");
+    }
     // Function to filter questions based on tags
     function filterQuestionsByTags(questions, tags) {
         return questions.filter((question) => tags.every((tag) => question.tags.includes(tag)));
@@ -522,13 +532,30 @@ calendarIcon.addEventListener("click", () => {
 
 // Handle date selection
 datePicker.addEventListener("change", (event) => {
-    debugger;
     const selectedDate = event.target.value;
     const formattedDate = new Date(selectedDate).toISOString().split("T")[0];
-
+    debugger;
     // Filter questions based on selected date
+    var input = document.querySelector("input.search-filter");
+
+    //filterQuestionsOnTagBased(input, formattedDate);
     const filteredQuestions = me_data.filter((que) => que.create_date === formattedDate);
     fil_ques = filteredQuestions;
     curr_que = 0;
     displayQuestion();
 });
+
+function popupAlert(message, time) {
+    var div = document.createElement("div");
+    div.className = "me-popup-alert";
+    div.textContent = message;
+    document.body.append(div);
+    if (time) return;
+    setTimeout(function () {
+        div.remove();
+    }, 3000);
+}
+function removePopupAlert() {
+    var x = document.querySelector(".me-popup-alert");
+    if (x) x.remove();
+}

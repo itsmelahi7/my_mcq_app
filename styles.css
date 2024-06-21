@@ -53,9 +53,16 @@ span.option {
 }
 
 div.middle {
-    border-top: 3px solid gray;
-    border-bottom: 3px solid gray;
+    border-top: 3px solid #cbcbcb;
+    border-bottom: 3px solid #cbcbcb;
     padding-bottom: 21px;
+}
+
+#date-picker {
+    width: 33px;
+    border: none;
+    font-size: 29px;
+    margin-left: 13px;
 }
 
 .que-text {

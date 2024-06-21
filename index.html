@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <link rel="stylesheet" href="styles.css" />
+        <link href="v6.4.2/css/all-1.css" rel="stylesheet" />
     </head>
 
     <body>
@@ -15,8 +16,24 @@
                     <span>Loading....</span>
                 </div>
             </div>
-            <div class="me-content hide">
-                <div class="top"></div>
+            <div class="me-content que hide">
+                <div class="top">
+                    <div class="search-filter tags">
+                        <input type="text" class="search-filter" placeholder="filter tags" />
+                    </div>
+                    <span class="all-tags link hide">show all tags</span>
+                    <div class="calender">
+                        <span class="calendar-icon">📅</span>
+                        <input type="date" id="date-picker" class="hide" />
+                    </div>
+                    <div class="setting hide">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                </div>
+                <div class="all-tags tags hide"></div>
+                <div class="filter-tags">
+                    <div class="tags"></div>
+                </div>
                 <div class="middle">
                     <div class="que-text"></div>
                     <div class="que-tags hide">
@@ -28,6 +45,27 @@
                 <div class="bottom">
                     <button class="new-question">New Question</button>
                 </div>
+            </div>
+            <span class="add-new-que hide"></span>
+
+            <div class="add-que sec hide d-f-v">
+                <span style="display: inline-block; text-align: center; padding: 10px">ADD QUESTION</span>
+                <textarea id="que" class="que" cols="30" rows="3" placeholder="add question"></textarea>
+                <div class="options d-f-v">
+                    <input type="text" class="option" placeholder="option a" />
+                    <input type="text" class="option" placeholder="option b" />
+                    <input type="text" class="option" placeholder="option c" />
+                    <input type="text" class="option" placeholder="option d" />
+                </div>
+                <div class="que-tags">
+                    <div class="tags">
+                        <input type="text" class="add-tag" placeholder="add tag" />
+                    </div>
+                </div>
+
+                <button class="add-que">Add</button>
+
+                <button class="update-gist">update gist</button>
             </div>
         </div>
 

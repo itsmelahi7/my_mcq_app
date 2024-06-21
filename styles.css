@@ -19,8 +19,13 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.content .top {
+.content div.top {
     height: 50px;
+    margin-top: 10px;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .content .middle_ {
@@ -45,6 +50,12 @@ span.option {
     padding: 7px;
     border-radius: 4px;
     background-color: #ebf3ff;
+}
+
+div.middle {
+    border-top: 3px solid gray;
+    border-bottom: 3px solid gray;
+    padding-bottom: 21px;
 }
 
 .que-text {
@@ -98,8 +109,8 @@ button.new-question {
     border-radius: 5px;
     width: 100%;
     margin: 0px 15px;
-    background-color: #3668e9;
-    color: white;
+    background-color: #e4e4e4;
+    color: #49494d;
     border: none;
     padding: 10px;
     font-size: 16px;
@@ -108,10 +119,29 @@ button.new-question {
     display: inline-block;
 }
 
-button.new-question:hover {
+button.new-question:hover_ {
     background-color: #4f37da;
 }
 
+.add-que {
+    padding: 15px;
+    background-color: beige;
+}
+
+.add-que textarea {
+    padding: 10px;
+}
+
+.add-que .option {
+    padding: 5px;
+    margin: 10px 0px;
+}
+
+.d-f-v {
+    display: flex;
+    flex-direction: column;
+
+}
 
 
 .me-cp {
@@ -123,7 +153,13 @@ button.new-question:hover {
     cursor: default;
 }
 
+.setting {
+    margin-left: auto;
+}
 
+.setting i::before {
+    font-size: x-large;
+}
 
 
 .tags {
@@ -137,9 +173,127 @@ button.new-question:hover {
     margin: 4px;
     border: 0px solid gray;
     padding: 3px 10px;
-    background-color: #e6e6e6;
-    color: #8383e0;
+    background-color: #efefef;
+    color: #4680ff;
     border-radius: 17px;
     display: inline-block;
     margin-right: 5px;
+    font-size: 0.8em;
+}
+
+.calender {
+    display: flex;
+}
+
+.que-count {
+    margin-left: 12px;
+}
+
+.calendar-icon {
+    cursor: pointer;
+    font-size: 23px;
+    margin-right: 14px;
+    margin-left: 14px;
+}
+
+.me-autocomplete-list {
+    border: 1px solid gray;
+    padding: 4px 10px;
+    background-color: white;
+    max-height: 200px;
+    position: absolute;
+    overflow-y: auto;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.me-autocomplete-list {
+    display: none;
+}
+
+.me-autocomplete-list.active {
+    display: block;
+}
+
+.me-autocomplete-list div {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.me-autocomplete-list div:hover {
+    background-color: rgb(212, 201, 201);
+}
+
+span.check-ans {
+    display: block;
+    text-align: center;
+    border: 0px solid gray;
+    padding: 7px;
+    background-color: #f4e8ff;
+    color: rgb(92, 92, 246);
+}
+
+.all-tags.tags {
+    flex-wrap: wrap;
+    margin: 20px;
+    max-height: 200px;
+}
+
+.check-ans.me_ans {
+    color: black;
+}
+
+.add-new-que {
+    position: fixed;
+    bottom: 20px;
+    /* Adjust this value to change the distance from the bottom */
+    right: 20px;
+    /* Adjust this value to change the distance from the right */
+    width: 50px;
+    /* Adjust the width of the icon */
+    height: 50px;
+    /* Adjust the height of the icon */
+    background-color: #e0e0e0;
+    /* Change this to your desired background color */
+    border-radius: 50%;
+    /* Makes the icon circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    /* Changes the cursor to a pointer when hovering over the icon */
+}
+
+span.all-tags {
+    min-width: 100px;
+    margin: 10px;
+    margin-left: auto;
+}
+
+.link {
+    color: #6464f4;
+    cursor: pointer;
+}
+
+.update-gist {
+    margin-top: 35px;
+    width: fit-content;
+    display: flex;
+    float: left;
+    color: blue;
+    background-color: transparent;
+    border: none;
+    margin-left: auto;
+}
+
+.search-filter {
+    border: 0px solid gray;
+}
+
+.search-filter input {
+    border: 1px solid gray;
+    padding: 5px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
 }

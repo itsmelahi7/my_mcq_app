@@ -1,6 +1,10 @@
 var me_data = [];
 var all_tags = [];
+var fil_ques = [];
 var curr_que = 0;
+var que_mode = "mcq";
+var new_ques = [];
+var new_que_tags = ["apple", "banana", "cat"];
 
 //me_data = getDataFromLocale("myData");
 me_data = getDataFromGit();
@@ -9,17 +13,184 @@ function initialLoading() {
     document.querySelector(".loading").classList.add("hide");
     document.querySelector(".me-content").classList.remove("hide");
     loadAllTags();
+    sortArrayRandomly(me_data);
+    fil_ques = me_data;
     displayQuestion();
+
+    new_que_tags = all_tags;
+    new_ques = getDataFromLocale("new_ques");
+    loadAllFilterTags();
 }
-// helllo HHHHHH
+
+document.querySelector("button.update-gist").addEventListener("click", () => {
+    if (checkInternetConnection) {
+        updateMyMcqAppGistFile();
+        new_ques = [];
+        saveDataInLocale("new_ques");
+    }
+});
+
 document.querySelector("button.new-question").addEventListener("click", () => {
     ++curr_que;
-    if (curr_que == me_data.length) {
+    if (curr_que == fil_ques.length) {
         curr_que = 0;
-        me_data = sortArrayRandomly(me_data);
+        sortArrayRandomly(fil_ques);
     }
     displayQuestion();
 });
+
+document.querySelector("button.add-que").addEventListener("click", () => {
+    var obj = {
+        id: generateUniqueId(),
+        create_date: getTodayDate(),
+        question: document.querySelector("textarea.que").value,
+        options: Array.from(document.querySelectorAll(".add-que .option")).map((option) => option.value),
+        tags: [],
+    };
+
+    // Collect tags, ensuring no duplicates
+    var tagElements = document.querySelectorAll(".que-tags .tag .name");
+    var tagSet = new Set(); // Using Set to ensure uniqueness
+    tagElements.forEach((tagElement) => {
+        tagSet.add(tagElement.textContent.trim());
+    });
+    obj.tags = Array.from(tagSet); // Convert Set back to array
+
+    // Add any new tags to new_que_tags array
+    obj.tags.forEach((tag) => {
+        if (!new_que_tags.includes(tag)) {
+            new_que_tags.push(tag);
+        }
+    });
+
+    new_ques.push(obj);
+    saveDataInLocale("new_ques", new_ques);
+    console.log(new_ques); // Log to see the added question, options, and tags
+    console.log(new_que_tags); // Log to see the updated new_que_tags array
+});
+
+document.querySelector("div.top input.search-filter").addEventListener("focus", (event) => {
+    setAutoComplete(event, all_tags, "search-filter-tag");
+});
+document.querySelector("div.add-que .tags input").addEventListener("focus", (event) => {
+    setAutoComplete(event, new_que_tags, "new-que-tag");
+});
+
+var autocompleteList = document.createElement("div");
+autocompleteList.className = "me-autocomplete-list";
+document.body.append(autocompleteList);
+
+function setAutoComplete(event, arr, type, target) {
+    var input = event.target;
+
+    input.addEventListener("input", function () {
+        var inputValue = input.value.trim().toLowerCase();
+        //const matchingNames = [];
+        //try {
+        const matchingNames = arr.filter((name) => name.toLowerCase().includes(inputValue));
+        //} catch (e) {}
+
+        autocompleteList.innerHTML = "";
+
+        if (true && inputValue !== "" && type != "search-filter-tag") {
+            const inputItem = document.createElement("div");
+            inputItem.textContent = 'new: "' + inputValue + '"';
+
+            inputItem.addEventListener("click", (event) => {
+                var tar = input.parentElement;
+                var tag = event.target.textContent.match(/"([^"]*)"/)[1].trim();
+                var div = document.createElement("div");
+                div.className = "tag";
+                div.innerHTML = `<span class="name">${tag}</span>
+                     <span class="remove-tag">x</span>`;
+                tar.insertBefore(div, input);
+                div.children[1].addEventListener("click", (event) => {
+                    div.remove();
+                });
+                input.value = "";
+                input.focus();
+                autocompleteList.classList.remove("active");
+                /*
+                // Add your logic here for handling the click event of the input value
+                var tar = input.parentElement;
+                var tag = event.target.textContent.match(/"([^"]*)"/)[1].trim();
+                if ((type = "me-add-que-tags")) {
+                    handleNewQuestionTags(input, tag);
+                }
+                input.value = "";
+                input.focus();
+                autocompleteList.classList.remove("active");
+                return;
+
+                var div = document.createElement("div");
+                div.className = "tag";
+                div.innerHTML = `<span class="name">${tag}</span>
+                 <span class="remove-tag">x</span>`;
+                tar.insertBefore(div, input);
+                div.children[1].addEventListener("click", (event) => {
+                    div.remove();
+                });*/
+            });
+            autocompleteList.appendChild(inputItem);
+        }
+
+        matchingNames.forEach((name) => {
+            const item = document.createElement("div");
+            item.textContent = name;
+
+            item.addEventListener("click", (event) => {
+                var tar = input.parentElement;
+                var tag = event.target.textContent.trim();
+                var div = document.createElement("div");
+                div.className = "tag";
+                div.innerHTML = `<span class="name">${tag}</span>
+                     <span class="remove-tag">x</span>`;
+                tar.insertBefore(div, input);
+
+                if (type == "search-filter-tag") {
+                    //handleFilterTag(input, tag);
+                    filterQuestionsOnTagBased();
+                    div.children[1].addEventListener("click", (event) => {
+                        div.remove();
+
+                        filterQuestionsOnTagBased();
+                    });
+                } else if (type == "search-image") {
+                    handleSelectedSearchImage(input, tag);
+                } else if (type == "me-add-que-tags") {
+                    handleNewQuestionTags(input, tag);
+                } else {
+                    div.children[1].addEventListener("click", (event) => {
+                        div.remove();
+                    });
+                }
+                input.value = "";
+                input.focus();
+                autocompleteList.classList.remove("active");
+            });
+
+            autocompleteList.appendChild(item);
+        });
+
+        if (matchingNames.length > 0 || inputValue !== "") {
+            autocompleteList.classList.add("active");
+        } else {
+            autocompleteList.classList.remove("active");
+        }
+
+        var inputRect = input.getBoundingClientRect();
+        autocompleteList.style.width = inputRect.width + "px";
+        autocompleteList.style.top = inputRect.bottom + window.scrollY + "px";
+        autocompleteList.style.left = inputRect.left + window.scrollX + "px";
+        if (input.classList.contains("filter-tag")) autocompleteList.style.width = "300px";
+    });
+
+    window.addEventListener("mousedown", function (event) {
+        if (!input.contains(event.target) && !autocompleteList.contains(event.target)) {
+            autocompleteList.classList.remove("active");
+        }
+    });
+}
 
 function sortArrayRandomly(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -30,14 +201,40 @@ function sortArrayRandomly(arr) {
 }
 
 function displayQuestion(que) {
-    if (!que) que = me_data[curr_que];
+    if (!que) que = fil_ques[curr_que];
+
     var que_text = document.querySelector(".que-text");
     que_text.innerHTML = "";
+    var que_count = document.createElement("span");
+    que_count.className = "que-count";
+    que_count.textContent = curr_que + 1 + "/" + fil_ques.length;
+    que_text.appendChild(que_count);
+    if (fil_ques.length == 0) {
+        que_count.textContent = "No question found...!";
+        return;
+    }
 
     var span = document.createElement("span");
     span.className = "question";
-    span.textContent = "Q: " + que.question;
     que_text.appendChild(span);
+    span.textContent = "Q. " + que.question;
+
+    if (que_mode == "normal") {
+        var span = document.createElement("span");
+        span.className = "check-ans link";
+        span.textContent = "check ans";
+        que_text.appendChild(span);
+
+        span.addEventListener("click", function () {
+            que.options.forEach((opt) => {
+                if (opt.indexOf("#ans")) {
+                    span.classList.add("me_ans");
+                    span.textContent = opt.replace(" #ans", "");
+                }
+            });
+        });
+        return;
+    }
 
     var options = document.createElement("div");
     options.className = "options";
@@ -118,14 +315,69 @@ function getDataFromLocale(key) {
         return null;
     }
 }
-function saveDataInLocale() {
-    var jsonData = JSON.stringify(me_data);
-    localStorage.setItem("myData", jsonData);
+function saveDataInLocale(key, data) {
+    var jsonData = JSON.stringify(data);
+    localStorage.setItem(key, jsonData);
 }
 
+function checkInternetConnection() {
+    if (navigator.onLine) {
+        console.log("You are online.");
+        return true;
+    } else {
+        console.log("You are offline.");
+        return false;
+    }
+}
+
+document.querySelector(".link.all-tags").addEventListener("click", (event) => {
+    const allTagsDiv = document.querySelector(".all-tags.tags");
+    const linkElement = event.target;
+
+    if (linkElement.classList.contains("active")) {
+        // Hide all-tags and update link text
+        allTagsDiv.classList.add("hide");
+        linkElement.textContent = "Show all tags";
+        linkElement.classList.remove("active");
+    } else {
+        // Show all-tags and update link text
+        allTagsDiv.classList.remove("hide");
+        linkElement.textContent = "Hide all tags";
+        linkElement.classList.add("active");
+    }
+});
+function loadAllFilterTags() {
+    const sortedTags = all_tags.sort();
+
+    //Count occurrences of each tag in me_data
+    const tagCounts = {};
+    me_data.forEach((question) => {
+        question.tags.forEach((tag) => {
+            if (tagCounts[tag]) {
+                tagCounts[tag]++;
+            } else {
+                tagCounts[tag] = 1;
+            }
+        });
+    });
+    // Step 3: Create div elements for each tag based on sortedTags and tagCounts
+    const tagsContainer = document.querySelector(".all-tags.tags"); // Assuming there's a container element with id 'tags-container'
+
+    sortedTags.forEach((tag, index) => {
+        const tagDiv = document.createElement("div");
+        tagDiv.className = "tag me-cp";
+        //.classList.add("tag");
+        tagDiv.textContent = `${tag} ${tagCounts[tag] ? tagCounts[tag] : ""}`;
+        tagsContainer.appendChild(tagDiv);
+        tagDiv.addEventListener("click", () => {
+            var input = document.querySelector("div.top input.search-filter");
+            filterQuestionsOnTagBased(input, tag);
+        });
+    });
+}
 async function getDataFromGit() {
-    var id = "355a6da99dbfceb52277a8e9dba96e93";
-    var filename = "me_data.json";
+    var id = "523f1476680bd526e4656c082f99f24a";
+    var filename = "my_mcq_app_data.json";
     const apiUrl = `https://api.github.com/gists/${id}`;
 
     return await fetch(apiUrl)
@@ -137,12 +389,145 @@ async function getDataFromGit() {
                 console.log(`Data from "${filename}" retrieved successfully`);
 
                 me_data = parsedData;
+                saveDataInLocale("me_data");
                 initialLoading();
             } else {
                 console.error("File not found in the Gist.");
+                var data = getDataFromLocale("me_data");
+                if (data) initialLoading();
             }
         })
         .catch((error) => {
             console.error("Error getting data from the Gist:", error);
+            var data = getDataFromLocale("me_data");
+            if (data) initialLoading();
         });
 }
+
+function generateUniqueId() {
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var id = "";
+    for (var i = 0; i < 10; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+}
+
+function getTodayDate() {
+    // in the YYYY-MM-DD format
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = String(today.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    var day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+//async function updateGist(gistId, filename, newContent, accessToken) {
+async function updateMyMcqAppGistFile() {
+    const gistId = "523f1476680bd526e4656c082f99f24a";
+    const filename = "my_mcq_app_data.json";
+    const all_data = [...me_data, ...new_ques];
+    const newContent = JSON.stringify(all_data, null, 2);
+    const accessToken = "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";
+
+    const url = `https://api.github.com/gists/${gistId}`;
+    const headers = {
+        Authorization: `token ${accessToken}`,
+        Accept: "application/vnd.github.v3+json",
+        "Content-Type": "application/json",
+    };
+    const body = {
+        files: {
+            [filename]: {
+                content: newContent,
+            },
+        },
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "PATCH",
+            headers: headers,
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Gist updated successfully:", data);
+    } catch (error) {
+        console.error("Failed to update gist:", error);
+    }
+}
+
+//updateGist(gistId, filename, newContent, accessToken);
+
+function filterQuestionsOnTagBased(input, tag) {
+    if (tag) {
+        var tar = input.parentElement;
+        var div = document.createElement("div");
+        div.className = "tag";
+        div.innerHTML = `<span class="name">${tag}</span>
+                     <span class="remove-tag">x</span>`;
+        tar.insertBefore(div, input);
+        div.children[1].addEventListener("click", (event) => {
+            div.remove();
+
+            filterQuestionsOnTagBased("cross");
+        });
+    }
+
+    const nameElements = document.querySelectorAll(".search-filter .tag .name");
+    const filter_tags = Array.from(nameElements).map((element) => element.textContent.trim());
+    // Function to filter questions based on tags
+    function filterQuestionsByTags(questions, tags) {
+        return questions.filter((question) => tags.every((tag) => question.tags.includes(tag)));
+    }
+    var filteredQuestions;
+    if (input == "cross") filteredQuestions = filterQuestionsByTags(me_data, filter_tags);
+    else filteredQuestions = filterQuestionsByTags(fil_ques, filter_tags);
+
+    fil_ques = filteredQuestions;
+    curr_que = 0;
+    displayQuestion();
+}
+function handleFilterTag(input, tag) {
+    var tar = input.parentElement;
+    var tag = event.target.textContent.trim();
+
+    var div = document.createElement("div");
+    div.className = "tag";
+    div.innerHTML = `<span class="name">${tag}</span>
+                     <span class="remove-tag">x</span>`;
+    tar.insertBefore(div, input);
+    div.children[1].addEventListener("click", (event) => {
+        div.remove();
+    });
+    input.value = "";
+    input.focus();
+}
+
+const calendarIcon = document.querySelector(".calendar-icon");
+const datePicker = document.getElementById("date-picker");
+
+// Show date picker when calendar icon is clicked
+calendarIcon.addEventListener("click", () => {
+    datePicker.classList.toggle("hide");
+    datePicker.focus();
+    //datePicker.click();
+});
+
+// Handle date selection
+datePicker.addEventListener("change", (event) => {
+    debugger;
+    const selectedDate = event.target.value;
+    const formattedDate = new Date(selectedDate).toISOString().split("T")[0];
+
+    // Filter questions based on selected date
+    const filteredQuestions = me_data.filter((que) => que.create_date === formattedDate);
+    fil_ques = filteredQuestions;
+    curr_que = 0;
+    displayQuestion();
+});

@@ -11,7 +11,7 @@ function initialLoading() {
     loadAllTags();
     displayQuestion();
 }
-// helllo
+// helllo HHHHHH
 document.querySelector("button.new-question").addEventListener("click", () => {
     ++curr_que;
     if (curr_que == me_data.length) {

@@ -6,9 +6,17 @@ var que_mode = "mcq";
 var new_ques = [];
 var new_que_tags = ["apple", "banana", "cat"];
 var me_admin = false;
+var git_token = null;
 
 //me_data = getDataFromLocale("myData");
-me_data = getDataFromGit();
+var gist_id = "1b59fd85ef6da4c753cc277887fe2b54"; // token gist file id
+var gist_filename = "token_gist.json"; // token gist filename
+getDataFromGit(gist_id, gist_filename, "git_token");
+
+gist_id = "4cb7b01ed98d271744b3cc662072b1ce"; // data gist file id
+gist_filename = "my_mcq_app_data.json"; // data gist file name
+getDataFromGit(gist_id, gist_filename, "me_data");
+
 //saveDataInLocale("me_admin", true);
 function initialLoading() {
     document.querySelector(".loading").classList.add("hide");
@@ -404,9 +412,7 @@ function loadAllFilterTags() {
         });
     });
 }
-async function getDataFromGit() {
-    var id = "4cb7b01ed98d271744b3cc662072b1ce"; // gist_id
-    var filename = "my_mcq_app_data.json"; // gist_filename
+async function getDataFromGit(id, filename, type) {
     const apiUrl = `https://api.github.com/gists/${id}`;
 
     return await fetch(apiUrl)
@@ -417,10 +423,20 @@ async function getDataFromGit() {
                 const parsedData = JSON.parse(fileContent);
                 console.log(`Data from "${filename}" retrieved successfully`);
 
-                me_data = parsedData;
+                //me_data = parsedData;
+                //return parsedData;
+                if (type == "git_token") {
+                    git_token = parsedData[0].me_mcq_app;
+                    saveDataInLocale("git_token", git_token);
+                } else if (type == "me_data") {
+                    me_data = parsedData;
+                    saveDataInLocale("me_data", me_data);
+                    initialLoading();
+                }
                 saveDataInLocale("me_data");
                 initialLoading();
             } else {
+                return;
                 console.error("File not found in the Gist.");
                 var data = getDataFromLocale("me_data");
                 if (data) initialLoading();
@@ -428,6 +444,7 @@ async function getDataFromGit() {
         })
         .catch((error) => {
             console.error("Error getting data from the Gist:", error);
+            return;
             var data = getDataFromLocale("me_data");
             if (data) initialLoading();
         });
@@ -460,8 +477,7 @@ async function updateMyMcqAppGistFile() {
     console.log("Updating Gist with ID:", gistId);
     const all_data = [...me_data, ...new_ques];
     const newContent = JSON.stringify(all_data, null, 2);
-    //const accessToken = "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";
-    const accessToken = "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";
+    const accessToken = git_token;
 
     const url = `https://api.github.com/gists/${gistId}`;
     const headers = {
@@ -496,50 +512,6 @@ async function updateMyMcqAppGistFile() {
         popupAlert("Gist updated successfully");
         new_ques = [];
         saveDataInLocale("new_ques", new_ques);
-    } catch (error) {
-        console.error("Failed to update gist:", error);
-        popupAlert("Failed to Update Gist");
-    }
-}
-
-async function updateMyMcqAppGistFile___() {
-    const gistId = "523f1476680bd526e4656c082f99f24a";
-    const filename = "my_mcq_app_data.json";
-    debugger;
-    const all_data = [...me_data, ...new_ques];
-    const newContent = JSON.stringify(all_data, null, 2);
-    //const accessToken = "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";
-    const accessToken = "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";
-
-    const url = `https://api.github.com/gists/${gistId}`;
-    const headers = {
-        Authorization: `token ${accessToken}`,
-        Accept: "application/vnd.github.v3+json",
-        "Content-Type": "application/json",
-    };
-    const body = {
-        files: {
-            [filename]: {
-                content: newContent,
-            },
-        },
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: "PATCH",
-            headers: headers,
-            body: JSON.stringify(body),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        console.log("Gist updated successfully:", data);
-        popupAlert("Gist updated successfully");
-        new_ques = [];
     } catch (error) {
         console.error("Failed to update gist:", error);
         popupAlert("Failed to Update Gist");

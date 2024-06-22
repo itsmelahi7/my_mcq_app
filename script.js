@@ -20,6 +20,7 @@ function initialLoading() {
 
     new_que_tags = all_tags;
     new_ques = getDataFromLocale("new_ques");
+    if (!new_ques) new_ques = [];
     loadAllFilterTags();
     saveDataInLocale("me_admin", true);
     me_admin = getDataFromLocale("me_admin");
@@ -33,6 +34,8 @@ function initialLoading() {
 }
 
 document.querySelector(".refresh-icon").addEventListener("click", () => {
+    location.reload(true);
+    return;
     fil_ques = me_data;
     sortArrayRandomly(fil_ques);
     document.querySelector(".filtered-tags .tags").innerHTML = "";
@@ -42,8 +45,9 @@ document.querySelector(".refresh-icon").addEventListener("click", () => {
 document.querySelector("button.update-gist").addEventListener("click", () => {
     if (checkInternetConnection) {
         updateMyMcqAppGistFile();
-        new_ques = [];
         saveDataInLocale("new_ques");
+    } else {
+        popupAlert("you are offline");
     }
 });
 
@@ -84,6 +88,7 @@ document.querySelector("button.add-que").addEventListener("click", () => {
     saveDataInLocale("new_ques", new_ques);
     console.log(new_ques); // Log to see the added question, options, and tags
     console.log(new_que_tags); // Log to see the updated new_que_tags array
+    popupAlert("new question added");
 });
 
 document.querySelector("div.top input.search-filter").addEventListener("focus", (event) => {
@@ -444,9 +449,11 @@ function getTodayDate() {
 async function updateMyMcqAppGistFile() {
     const gistId = "523f1476680bd526e4656c082f99f24a";
     const filename = "my_mcq_app_data.json";
+    debugger;
     const all_data = [...me_data, ...new_ques];
     const newContent = JSON.stringify(all_data, null, 2);
-    const accessToken = "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";
+    //const accessToken = "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";
+    const accessToken = "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";
 
     const url = `https://api.github.com/gists/${gistId}`;
     const headers = {
@@ -475,8 +482,11 @@ async function updateMyMcqAppGistFile() {
 
         const data = await response.json();
         console.log("Gist updated successfully:", data);
+        popupAlert("Gist updated successfully");
+        new_ques = [];
     } catch (error) {
         console.error("Failed to update gist:", error);
+        popupAlert("Failed to Update Gist");
     }
 }
 

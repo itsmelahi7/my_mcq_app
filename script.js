@@ -9,7 +9,7 @@ var me_admin = false;
 
 //me_data = getDataFromLocale("myData");
 me_data = getDataFromGit();
-
+saveDataInLocale("me_admin", true);
 function initialLoading() {
     document.querySelector(".loading").classList.add("hide");
     document.querySelector(".me-content").classList.remove("hide");
@@ -23,6 +23,13 @@ function initialLoading() {
     loadAllFilterTags();
     saveDataInLocale("me_admin", true);
     me_admin = getDataFromLocale("me_admin");
+    if (me_admin) {
+        var span1 = document.querySelector("span.add-new-que");
+        span1.classList.remove("hide");
+        span1.addEventListener("click", () => {
+            document.querySelector("div.add-que").classList.toggle("hide");
+        });
+    }
 }
 
 document.querySelector("button.update-gist").addEventListener("click", () => {

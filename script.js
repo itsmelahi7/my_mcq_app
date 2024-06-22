@@ -9,7 +9,7 @@ var me_admin = false;
 
 //me_data = getDataFromLocale("myData");
 me_data = getDataFromGit();
-saveDataInLocale("me_admin", true);
+//saveDataInLocale("me_admin", true);
 function initialLoading() {
     document.querySelector(".loading").classList.add("hide");
     document.querySelector(".me-content").classList.remove("hide");

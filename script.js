@@ -104,7 +104,10 @@ document.querySelector("button.add-que").addEventListener("click", () => {
     console.log(`new question object added ${obj}`);
     popupAlert("new question added");
 });
-
+function runForMeEditMode() {
+    document.querySelector("span.add-new-que").classList.remove("hide");
+    document.querySelector("div.add-que").classList.remove("hide");
+}
 document.querySelector("div.top input.search-filter").addEventListener("focus", (event) => {
     setAutoComplete(event, all_tags, "search-filter-tag");
 });

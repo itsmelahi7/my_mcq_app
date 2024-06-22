@@ -20,10 +20,11 @@ function initialLoading() {
 
     new_que_tags = all_tags;
     new_ques = getDataFromLocale("new_ques");
-    if (!new_ques) new_ques = [];
+    if (!new_ques.length) new_ques = [];
     loadAllFilterTags();
-    //saveDataInLocale("me_admin", true);
+    saveDataInLocale("me_admin", true);
     me_admin = getDataFromLocale("me_admin");
+    //debugger;
     if (me_admin) {
         var span1 = document.querySelector("span.add-new-que");
         span1.classList.remove("hide");
@@ -339,8 +340,13 @@ function getDataFromLocale(key) {
     }
 }
 function saveDataInLocale(key, data) {
-    var jsonData = JSON.stringify(data);
-    localStorage.setItem(key, jsonData);
+    if (Array.isArray(data)) {
+        var jsonData = JSON.stringify(data);
+        localStorage.setItem(key, jsonData);
+    } else {
+        //var jsonData = JSON.stringify(data);
+        localStorage.setItem(key, data);
+    }
 }
 
 function checkInternetConnection() {
@@ -455,7 +461,7 @@ async function updateMyMcqAppGistFile() {
     const all_data = [...me_data, ...new_ques];
     const newContent = JSON.stringify(all_data, null, 2);
     //const accessToken = "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";
-    const accessToken = "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";
+    const accessToken = "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";
 
     const url = `https://api.github.com/gists/${gistId}`;
     const headers = {
@@ -489,6 +495,7 @@ async function updateMyMcqAppGistFile() {
         console.log("Gist updated successfully:", data);
         popupAlert("Gist updated successfully");
         new_ques = [];
+        saveDataInLocale("new_ques", new_ques);
     } catch (error) {
         console.error("Failed to update gist:", error);
         popupAlert("Failed to Update Gist");

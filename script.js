@@ -250,6 +250,7 @@ function displayQuestion(que) {
     que_count.textContent = curr_que + 1 + "/" + fil_ques.length;
     que_text.appendChild(que_count);
     if (fil_ques.length == 0) {
+        que_count.className = "que-count";
         que_count.textContent = "No question found...!";
         return;
     }

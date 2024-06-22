@@ -6,12 +6,12 @@ var que_mode = "mcq";
 var new_ques = [];
 var new_que_tags = ["apple", "banana", "cat"];
 var me_admin = false;
-var git_token = null;
+var git_token = "ghp_XUplYMw_elahiL0bgLAwvBBp_elahi_CVSXLcnF86on4g_elahi_Eoyq";
 
 //me_data = getDataFromLocale("myData");
 var gist_id = "1b59fd85ef6da4c753cc277887fe2b54"; // token gist file id
 var gist_filename = "token_gist.json"; // token gist filename
-getDataFromGit(gist_id, gist_filename, "git_token");
+//getDataFromGit(gist_id, gist_filename, "git_token");
 
 gist_id = "4cb7b01ed98d271744b3cc662072b1ce"; // data gist file id
 gist_filename = "my_mcq_app_data.json"; // data gist file name
@@ -477,7 +477,7 @@ async function updateMyMcqAppGistFile() {
     console.log("Updating Gist with ID:", gistId);
     const all_data = [...me_data, ...new_ques];
     const newContent = JSON.stringify(all_data, null, 2);
-    const accessToken = git_token;
+    const accessToken = git_token.replace(/_elahi_/g, "");
 
     const url = `https://api.github.com/gists/${gistId}`;
     const headers = {

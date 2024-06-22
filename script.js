@@ -6,7 +6,7 @@ var que_mode = "mcq";
 var new_ques = [];
 var new_que_tags = ["apple", "banana", "cat"];
 var me_admin = false;
-var git_token = "ghp_XUplYMw_elahiL0bgLAwvBBp_elahi_CVSXLcnF86on4g_elahi_Eoyq";
+var git_token = ""; // "ghp_XUplYMw_elahi_L0bgLAwvBBp_elahi_CVSXLcnF86on4g_elahi_Eoyq";
 
 //me_data = getDataFromLocale("myData");
 var gist_id = "1b59fd85ef6da4c753cc277887fe2b54"; // token gist file id
@@ -28,16 +28,23 @@ function initialLoading() {
 
     new_que_tags = all_tags;
     new_ques = getDataFromLocale("new_ques");
-    if (!new_ques.length) new_ques = [];
+    if (!new_ques) new_ques = [];
     loadAllFilterTags();
     saveDataInLocale("me_admin", true);
     me_admin = getDataFromLocale("me_admin");
-    //debugger;
-    if (me_admin) {
+    //
+    if (false) {
         var span1 = document.querySelector("span.add-new-que");
         span1.classList.remove("hide");
-        span1.addEventListener("click", () => {
+        /* span1.addEventListener("click", () => {
+            debugger;
             document.querySelector("div.add-que").classList.toggle("hide");
+        }); */
+        document.body.addEventListener("click", (event) => {
+            if (event.target === span1) {
+                debugger;
+                document.querySelector("div.add-que").classList.toggle("hide");
+            }
         });
     }
 }
@@ -54,7 +61,6 @@ document.querySelector(".refresh-icon").addEventListener("click", () => {
 document.querySelector("button.update-gist").addEventListener("click", () => {
     if (checkInternetConnection) {
         updateMyMcqAppGistFile();
-        saveDataInLocale("new_ques");
     } else {
         popupAlert("you are offline");
     }
@@ -95,8 +101,7 @@ document.querySelector("button.add-que").addEventListener("click", () => {
 
     new_ques.push(obj);
     saveDataInLocale("new_ques", new_ques);
-    console.log(new_ques); // Log to see the added question, options, and tags
-    console.log(new_que_tags); // Log to see the updated new_que_tags array
+    console.log(`new question object added ${obj}`);
     popupAlert("new question added");
 });
 
@@ -475,9 +480,9 @@ async function updateMyMcqAppGistFile() {
     const gistId = "4cb7b01ed98d271744b3cc662072b1ce";
     const filename = "my_mcq_app_data.json";
     console.log("Updating Gist with ID:", gistId);
-    const all_data = [...me_data, ...new_ques];
+    const all_data = [...new_ques, ...me_data];
     const newContent = JSON.stringify(all_data, null, 2);
-    const accessToken = git_token.replace(/_elahi_/g, "");
+    const accessToken = "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"; //git_token.replace(/_elahi_/g, "");
 
     const url = `https://api.github.com/gists/${gistId}`;
     const headers = {
@@ -505,6 +510,7 @@ async function updateMyMcqAppGistFile() {
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
+            downloadJSON(all_data);
         }
 
         const data = await response.json();
@@ -538,7 +544,7 @@ function filterQuestionsOnTagBased(input, tag) {
     const nameElements = document.querySelectorAll(".filtered-tags .tag .name");
     const filter_tags = Array.from(nameElements).map((element) => element.textContent.trim());
     var filtered_tags_ele = document.querySelector(".filtered-tags");
-    debugger;
+
     if (filter_tags.length == 0) {
         filtered_tags_ele.classList.add("hide");
     } else {
@@ -586,7 +592,7 @@ calendarIcon.addEventListener("click", () => {
 datePicker.addEventListener("change", (event) => {
     const selectedDate = event.target.value;
     const formattedDate = new Date(selectedDate).toISOString().split("T")[0];
-    debugger;
+
     // Filter questions based on selected date
     var input = document.querySelector("input.search-filter");
 
@@ -610,4 +616,28 @@ function popupAlert(message, time) {
 function removePopupAlert() {
     var x = document.querySelector(".me-popup-alert");
     if (x) x.remove();
+}
+
+function downloadJSON(all_data) {
+    // Convert object array to JSON format
+    const jsonData = JSON.stringify(all_data, null, 4);
+
+    // Get the current date and time
+    const currentDate = new Date();
+    const fileName = `my_mcq_app_${currentDate.getFullYear()}_${String(currentDate.getMonth() + 1).padStart(2, "0")}_${String(currentDate.getDate()).padStart(2, "0")}_${String(currentDate.getHours()).padStart(2, "0")}_${String(currentDate.getMinutes()).padStart(2, "0")}.json`;
+
+    // Create a blob with the JSON data
+    const blob = new Blob([jsonData], { type: "application/json" });
+
+    // Create a link element
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+
+    // Programmatically click the link to trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove the link element from the document
+    document.body.removeChild(link);
 }

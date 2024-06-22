@@ -22,7 +22,7 @@ function initialLoading() {
     new_ques = getDataFromLocale("new_ques");
     if (!new_ques) new_ques = [];
     loadAllFilterTags();
-    saveDataInLocale("me_admin", true);
+    //saveDataInLocale("me_admin", true);
     me_admin = getDataFromLocale("me_admin");
     if (me_admin) {
         var span1 = document.querySelector("span.add-new-que");
@@ -399,8 +399,8 @@ function loadAllFilterTags() {
     });
 }
 async function getDataFromGit() {
-    var id = "523f1476680bd526e4656c082f99f24a";
-    var filename = "my_mcq_app_data.json";
+    var id = "4cb7b01ed98d271744b3cc662072b1ce"; // gist_id
+    var filename = "my_mcq_app_data.json"; // gist_filename
     const apiUrl = `https://api.github.com/gists/${id}`;
 
     return await fetch(apiUrl)
@@ -447,6 +447,55 @@ function getTodayDate() {
 
 //async function updateGist(gistId, filename, newContent, accessToken) {
 async function updateMyMcqAppGistFile() {
+    //const gistId = "523f1476680bd526e4656c082f99f24a";
+    //const gistId = "4cb7b01ed98d271744b3cc662072b1ce";
+    const gistId = "4cb7b01ed98d271744b3cc662072b1ce";
+    const filename = "my_mcq_app_data.json";
+    console.log("Updating Gist with ID:", gistId);
+    const all_data = [...me_data, ...new_ques];
+    const newContent = JSON.stringify(all_data, null, 2);
+    //const accessToken = "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";
+    const accessToken = "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";
+
+    const url = `https://api.github.com/gists/${gistId}`;
+    const headers = {
+        Authorization: `token ${accessToken}`,
+        Accept: "application/vnd.github.v3+json",
+        "Content-Type": "application/json",
+    };
+    const body = {
+        files: {
+            [filename]: {
+                content: newContent,
+            },
+        },
+    };
+
+    try {
+        console.log("Sending request to update Gist...");
+        const response = await fetch(url, {
+            method: "PATCH",
+            headers: headers,
+            body: JSON.stringify(body),
+        });
+
+        console.log("Response received:", response);
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Gist updated successfully:", data);
+        popupAlert("Gist updated successfully");
+        new_ques = [];
+    } catch (error) {
+        console.error("Failed to update gist:", error);
+        popupAlert("Failed to Update Gist");
+    }
+}
+
+async function updateMyMcqAppGistFile___() {
     const gistId = "523f1476680bd526e4656c082f99f24a";
     const filename = "my_mcq_app_data.json";
     debugger;

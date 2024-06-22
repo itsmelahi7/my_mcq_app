@@ -1,26 +1,25 @@
 [
   {
+    "id": "yBC8zrTMCS",
+    "create_date": "2024-06-21",
+    "question": "Who wrote the book \"Hind Swaraj\"?",
+    "options": [
+      "Sardar Patel",
+      "SC Bose ",
+      "Mahatma Gandhi #ans",
+      "Jawaharlal Nehru"
+    ],
+    "tags": [
+      "history",
+      "person"
+    ]
+  },
+  {
     "question": "India borrowed the idea of JUSTICE in the preamble from which country?",
     "options": [
       "USA constitution",
       "FRENCH constitution",
       "USSR constitution #ans",
-      "Canada constitution"
-    ],
-    "tags": [
-      "polity",
-      "preamble",
-      "SSC",
-      "DSSRB 2024 Classes"
-    ],
-    "explanation": ""
-  },
-  {
-    "question": "India borrowed the idea of EQUALITY in the preamble from which country?",
-    "options": [
-      "FRENCH constitution #ans",
-      "USSR constitution",
-      "USA constitution",
       "Canada constitution"
     ],
     "tags": [
@@ -64,20 +63,35 @@
     "explanation": ""
   },
   {
-    "question": "India borrowed the idea of LIBERTY in the preamble from which country?",
+    "id": "HFTLzLdgEI",
+    "create_date": "2024-06-21",
+    "question": "Who coined the term \"Hindustan\" for the present India?  ",
     "options": [
-      "Canada constitution",
-      "USSR constitution",
-      "FRENCH constitution #ans",
-      "USA constitution"
+      "Alberuni",
+      "Minhaj-i-Siraj ",
+      "Amir Khusru #ans ",
+      "Abul Fazl"
     ],
     "tags": [
-      "polity",
-      "preamble",
-      "SSC",
-      "DSSRB 2024 Classes"
+      "history",
+      "term",
+      "person"
+    ]
+  },
+  {
+    "id": "HYgCI8lWdK",
+    "create_date": "2024-06-21",
+    "question": "Who wrote the book \"Discovery of India\"?",
+    "options": [
+      "SC Bose ",
+      "Jawaharlal Nehru #ans",
+      "Mahatma Gandhi ",
+      "Sardar Patel"
     ],
-    "explanation": ""
+    "tags": [
+      "history",
+      "person"
+    ]
   },
   {
     "question": "India borrowed the idea of Fundamental Duties from which country?",
@@ -94,6 +108,53 @@
       "DSSRB 2024 Classes"
     ],
     "explanation": ""
+  },
+  {
+    "id": "fD91e92pPt",
+    "create_date": "2024-06-21",
+    "question": "Who gave ths slogan \"Jai Hind\"?",
+    "options": [
+      "SC Bose #ans",
+      "Jawaharlal Nehru",
+      "Mahatma Gandhi",
+      "Sardar Patel"
+    ],
+    "tags": [
+      "history",
+      "person"
+    ]
+  },
+  {
+    "question": "India constitution is called a living constitution because?",
+    "options": [
+      "It can be amended by the president",
+      "It can be amended by the parliament #ans",
+      "It can be amended by the lok sabha",
+      "It can be amended by the supreme court"
+    ],
+    "tags": [
+      "polity",
+      "preamble",
+      "SSC",
+      "DSSRB 2024 Classes"
+    ],
+    "explanation": ""
+  },
+  {
+    "id": "TYvuNK4OC2",
+    "create_date": "2024-06-21",
+    "question": "Who coined the term \"Hind\" for the present India?  ",
+    "options": [
+      "Alberuni",
+      "Minhaj-i-Siraj #ans ",
+      "Amir Khusru",
+      "Abul Fazl"
+    ],
+    "tags": [
+      "history",
+      "term",
+      "person"
+    ]
   },
   {
     "question": "India borrowed the idea of Fundamental Rights from which country?",
@@ -126,5 +187,114 @@
       "DSSRB 2024 Classes"
     ],
     "explanation": ""
+  },
+  {
+    "id": "uAr3CHPEVr",
+    "create_date": "2024-06-21",
+    "question": "sdasfds",
+    "options": [
+      "dfd",
+      "dfdf #ans",
+      "dsd",
+      "sdfsdf"
+    ],
+    "tags": [
+      "polity",
+      "geography"
+    ]
+  },
+  {
+    "id": "XqxJkcY5WB",
+    "create_date": "2024-06-21",
+    "question": "Who wrote the book \"Azad Hind\"?",
+    "options": [
+      "SC Bose  #ans",
+      "Jawaharlal Nehru ",
+      "Mahatma Gandhi ",
+      "Sardar Patel"
+    ],
+    "tags": [
+      "history",
+      "person"
+    ]
+  },
+  {
+    "id": "O35EyiXQby",
+    "create_date": "2024-06-21",
+    "question": "Who coined the term \"Hind\" for the present India?  ",
+    "options": [
+      "Alberuni",
+      "Minhaj-i-Siraj #ans ",
+      "Amir Khusru",
+      "Abul Fazl"
+    ],
+    "tags": [
+      "history",
+      "term",
+      "person"
+    ]
+  },
+  {
+    "question": "India borrowed the idea of EQUALITY in the preamble from which country?",
+    "options": [
+      "FRENCH constitution #ans",
+      "USSR constitution",
+      "USA constitution",
+      "Canada constitution"
+    ],
+    "tags": [
+      "polity",
+      "preamble",
+      "SSC",
+      "DSSRB 2024 Classes"
+    ],
+    "explanation": ""
+  },
+  {
+    "question": "India borrowed the idea of LIBERTY in the preamble from which country?",
+    "options": [
+      "Canada constitution",
+      "USSR constitution",
+      "FRENCH constitution #ans",
+      "USA constitution"
+    ],
+    "tags": [
+      "polity",
+      "preamble",
+      "SSC",
+      "DSSRB 2024 Classes"
+    ],
+    "explanation": ""
+  },
+  {
+    "id": "XRsaojxLlL",
+    "create_date": "2024-06-21",
+    "question": "Who was the founder of Mughal empire?",
+    "options": [
+      "Akbar",
+      "Babur #ans",
+      "Humayun",
+      "Aurangzeb"
+    ],
+    "tags": [
+      "history",
+      "mughals"
+    ]
+  },
+  {
+    "id": "28qvUdGK4U",
+    "create_date": "2024-06-21",
+    "question": "ELAHI BABA WAS?",
+    "options": [
+      "CHOOR #ans",
+      "EDWE",
+      "Dqdw",
+      "SDSWED"
+    ],
+    "tags": [
+      "history",
+      "polity",
+      "person"
+    ]
   }
 ]

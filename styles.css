@@ -122,6 +122,13 @@ span.option.wrong-ans {
     border: 0px solid red;
 }
 
+.fa-arrows-rotate:before {
+    content: "\f021";
+    color: gray;
+    font-size: 23px;
+    margin: 0px 8px;
+}
+
 .hide {
     display: none !important;
 }

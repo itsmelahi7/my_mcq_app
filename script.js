@@ -32,6 +32,13 @@ function initialLoading() {
     }
 }
 
+document.querySelector(".refresh-icon").addEventListener("click", () => {
+    fil_ques = me_data;
+    sortArrayRandomly(fil_ques);
+    document.querySelector(".filtered-tags .tags").innerHTML = "";
+    curr_que = 0;
+    displayQuestion();
+});
 document.querySelector("button.update-gist").addEventListener("click", () => {
     if (checkInternetConnection) {
         updateMyMcqAppGistFile();

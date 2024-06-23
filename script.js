@@ -18,7 +18,14 @@ var gist_id = "4cb7b01ed98d271744b3cc662072b1ce"; // data gist file id
 var gist_filename = "my_mcq_app_data.json"; // data gist file name
 //gist_id = "7cef8dc981526e334218005a93e61598"; //testing_code
 //gist_filename = "test_my_mcq_app_data.json"; // testing_code
-getDataFromGit(gist_id, gist_filename, "me_data");
+var isOnline = checkInternetConnection();
+debugger;
+if (isOnline) {
+    getDataFromGit(gist_id, gist_filename, "me_data");
+} else {
+    me_data = getDataFromLocale("me_data");
+    initialLoading();
+}
 
 //saveDataInLocale("me_admin", true);
 function initialLoading() {
@@ -414,6 +421,10 @@ function displayQuestion(que) {
         options.appendChild(span);
     });
 
+    document.querySelector(".copy-ref").addEventListener("click", () => {
+        copyToClipboard(que.id);
+        popupAlert("Question id copied to clipboard");
+    });
     var tag_target = document.querySelector(".que-tags .tags");
     displayTags(que.tags, tag_target);
 }
@@ -445,14 +456,14 @@ function getDataFromLocale(key) {
     try {
         const jsonData = localStorage.getItem(key);
         if (jsonData === null) {
-            console.log(`No local data is found for key: ${key}`);
+            console.log(`me: No local data is found for key: "${key}"`);
             return null;
         }
         var data = JSON.parse(jsonData);
-        console.log(`Local data for key "${key}" retrived successfully from locale`);
+        console.log(`me: Local data for key "${key}" retrived successfully from locale`);
         return data;
     } catch (error) {
-        console.error(`Error retrieving local data with key "${key}" from localStorage`);
+        console.error(`me: Error retrieving local data with key "${key}" from localStorage`);
         return null;
     }
 }
@@ -460,9 +471,11 @@ function saveDataInLocale(key, data) {
     if (Array.isArray(data)) {
         var jsonData = JSON.stringify(data);
         localStorage.setItem(key, jsonData);
+        console.log(`me: Data with key "${key}" saved in locale; [Array]`);
     } else {
         //var jsonData = JSON.stringify(data);
         localStorage.setItem(key, data);
+        console.log(`me: Data with key "${key}" saved in locale`);
     }
 }
 
@@ -553,19 +566,19 @@ async function getDataFromGit(id, filename, type) {
             if (gistData.files && gistData.files[filename]) {
                 const fileContent = gistData.files[filename].content;
                 const parsedData = JSON.parse(fileContent);
-                console.log(`Data from "${filename}" retrieved successfully`);
+                console.log(`me: Data from gist file "${filename}" retrieved successfully`);
 
+                me_data = parsedData;
+                saveDataInLocale("me_data", me_data);
+                initialLoading();
                 //me_data = parsedData;
                 //return parsedData;
                 if (type == "git_token") {
                     git_token = parsedData[0].me_mcq_app;
                     saveDataInLocale("git_token", git_token);
                 } else if (type == "me_data") {
-                    me_data = parsedData;
-                    saveDataInLocale("me_data", me_data);
-                    initialLoading();
                 }
-                saveDataInLocale("me_data");
+                //saveDataInLocale("me_data");
                 //initialLoading();
             } else {
                 return;
@@ -904,3 +917,20 @@ document.querySelector(".tab.about-me").addEventListener("click", () => {
 document.querySelector(".about-me span.cross").addEventListener("click", () => {
     document.querySelector(".about-me").classList.add("hide");
 });
+
+function copyToClipboard(text) {
+    // Create a temporary input element
+    const input = document.createElement("input");
+    input.value = text;
+    document.body.appendChild(input);
+
+    // Select the text in the input field
+    input.select();
+    input.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the selected text to the clipboard
+    document.execCommand("copy");
+
+    // Remove the temporary input element
+    document.body.removeChild(input);
+}

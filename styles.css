@@ -373,3 +373,27 @@ span.all-tags {
     align-items: center;
     text-align: center;
 }
+
+.prev-ques-list {
+    display: flex;
+    margin: 10px 20px;
+    flex-wrap: wrap;
+}
+
+.prev-ques-list .prev-que {
+    border: 0px solid gray;
+    padding: 4px;
+    border-radius: 34px;
+    background-color: red;
+    width: 7px;
+    height: 7px;
+    margin: 3px;
+}
+
+.prev-ques-list .prev-que.correct-ans {
+    background-color: #b6ebb6;
+}
+
+.prev-ques-list .prev-que.wrong-ans {
+    background-color: #efaab1;
+}

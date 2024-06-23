@@ -7,7 +7,6 @@ var new_ques = [];
 var new_que_tags = ["apple", "banana", "cat"];
 var me_admin = false;
 var git_token = ""; // "ghp_XUplYMw_elahi_L0bgLAwvBBp_elahi_CVSXLcnF86on4g_elahi_Eoyq";
-var user_data = [];
 
 //me_data = getDataFromLocale("myData");
 var gist_id = "1b59fd85ef6da4c753cc277887fe2b54"; // token gist file id
@@ -16,8 +15,6 @@ var gist_filename = "token_gist.json"; // token gist filename
 
 gist_id = "4cb7b01ed98d271744b3cc662072b1ce"; // data gist file id
 gist_filename = "my_mcq_app_data.json"; // data gist file name
-//gist_id = "7cef8dc981526e334218005a93e61598"; //testing_code
-//gist_filename = "test_my_mcq_app_data.json"; // testing_code
 getDataFromGit(gist_id, gist_filename, "me_data");
 
 //saveDataInLocale("me_admin", true);
@@ -26,7 +23,6 @@ function initialLoading() {
     document.querySelector(".me-content").classList.remove("hide");
     loadAllTags();
     sortArrayRandomly(me_data);
-
     fil_ques = me_data;
     displayQuestion();
 
@@ -36,7 +32,6 @@ function initialLoading() {
     loadAllFilterTags();
     saveDataInLocale("me_admin", true);
     me_admin = getDataFromLocale("me_admin");
-
     //
     if (false) {
         var span1 = document.querySelector("span.add-new-que");
@@ -116,7 +111,7 @@ document.querySelector("button.add-que").addEventListener("click", () => {
             new_que_tags.push(tag);
         }
     });
-    obj.tags.push(getTodayDate());
+
     new_ques.push(obj);
     saveDataInLocale("new_ques", new_ques);
     console.log(`new question object added ${obj}`);
@@ -311,11 +306,10 @@ function displayQuestion(que) {
     que.options.forEach((opt, index) => {
         var span = document.createElement("span");
         span.className = "option me-cp";
-        span.id = opt.id;
         var optionLetters = ["(a)", "(b)", "(c)", "(d)"];
-        var optionText = optionLetters[index] + " " + opt.text.replace(" #ans", "");
+        var optionText = optionLetters[index] + " " + opt.replace(" #ans", "");
         span.textContent = optionText;
-        if (opt.text.includes("#ans")) {
+        if (opt.includes("#ans")) {
             span.classList.add("ans");
         }
         span.addEventListener("click", function () {
@@ -329,43 +323,19 @@ function displayQuestion(que) {
             if (span.classList.contains("ans")) {
                 span.classList.add("correct-ans");
                 div.classList.add("correct-ans");
-                div.setAttribute("answer-opt", span.id);
             } else {
                 span.classList.add("wrong-ans");
                 div.classList.add("wrong-ans");
-                div.setAttribute("answer-opt", span.id);
             }
-
-            div.addEventListener("click", (event) => {
-                debugger;
-                var div = event.target;
-                var que_id = div.getAttribute("id");
-                var selected_option_id = div.getAttribute("selected-opt");
-                var answer_option_id = div.getAttribute("answer-opt");
-                var que = getQuestionById(que_id);
+            div.addEventListener("click", () => {
+                var que = getQuestionById(div.id);
                 displayQuestion(que);
-                //setTimeout(() => {
-                var options = document.querySelectorAll("div.que-text .options .option");
-                options.forEach((option) => {
-                    if (option.id == answer_option_id) {
-                        option.className = "option me-cp correct-ans disabled";
-                    }
-                });
-                if (selected_option_id != answer_option_id) {
-                    options.forEach((option) => {
-                        if (option.id == selected_option_id) {
-                            option.className = "option me-cp wrong-ans disabled";
-                        }
-                    });
-                }
-                //}, 1000);
             });
 
             // Add 'correct-ans' class to the span with the 'ans' class
             document.querySelectorAll(".option").forEach((optionSpan) => {
                 if (optionSpan.classList.contains("ans")) {
                     optionSpan.classList.add("correct-ans");
-                    div.setAttribute("selected-opt", optionSpan.id);
                 }
             });
 
@@ -493,19 +463,6 @@ function getQuestionById(id) {
     return null; // Return null if no match is found
 }
 
-function convertOptions() {
-    var data = me_data;
-    data.forEach((que) => {
-        const transformedOptions = [];
-        que.options.forEach((option) => {
-            transformedOptions.push({
-                id: generateUniqueId(),
-                text: option,
-            });
-        });
-        que.options = transformedOptions;
-    });
-}
 async function getDataFromGit(id, filename, type) {
     const apiUrl = `https://api.github.com/gists/${id}`;
 

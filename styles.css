@@ -12,11 +12,13 @@ body {
     background-color: gray;
 }
 
-.content {
+div.content {
     height: 100%;
     background-color: white;
     width: 100%;
     max-width: 500px;
+    height: 100%;
+    overflow-y: scroll;
     margin: 0 auto;
     position: absolute;
     top: 50%;
@@ -417,4 +419,167 @@ div.today-que-info {
 div.today-que-info span.label {
     color: var(--span-lavel-color);
     margin: 10px 20px;
+}
+
+i.refresh {
+    margin-left: auto;
+}
+
+i.fa-bars.menu-icon {
+    font-size: 20px;
+}
+
+.mobile-tab.overlay {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: -300px;
+    height: 100%;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: right 0.9s ease-in-out;
+    background-color: #183052;
+    width: 77%;
+}
+
+.mobile-tab .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 29px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.mobile-tab.overlay .tab {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    gap: 10px;
+    margin: 10px 0px;
+    cursor: pointer;
+}
+
+.mobile-tab.overlay .tab span.label,
+.mobile-tab.overlay .tab i {
+    color: white;
+}
+
+div.tab.separator {
+    border: 1px solid gray;
+    margin: 10px 0px;
+}
+
+.mobile-tab .tab-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 65px;
+}
+
+.mobile-tab button {
+    padding: 10px;
+    margin: 0px;
+    background-color: inherit;
+    color: var(--header-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    font-size: var(--font-size);
+}
+
+.mobile-tab.overlay button.tab.save {
+    display: flex;
+    border: 0px;
+    background-color: #6ec76e;
+    width: fit-content;
+    padding: 4px 17px;
+    margin-left: auto;
+}
+
+/* About me page css*/
+.about-me {
+    margin-bottom: 30px;
+}
+
+
+.about-me div.image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Optional: set a fixed width and height for the div if needed */
+
+    height: 150px;
+    border-radius: 85px;
+}
+
+.about-me div.image img {
+    /* Optional: set a max-width to prevent the image from overflowing */
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 100px;
+}
+
+.cat-visibility::before {
+    color: var(--label-color);
+}
+
+
+
+
+.about-me div.text {
+    display: block;
+}
+
+.about-me .row {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-me .row.social-media img {
+    width: 30px;
+    margin: 7px;
+}
+
+.about-me div.text {
+    display: flex;
+    flex-direction: column;
+}
+
+.about-me .head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #313285;
+    margin: 41px 0px;
+}
+
+.about-me .head * {
+    color: white;
+}
+
+.about-me .head h1 {
+    font-size: 1.5em;
+    padding: 0px 16px;
+}
+
+.about-me .head span {
+    margin-left: auto;
+    margin-right: 15px;
+    border: 2px solid white;
+    padding: 3px 6px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.about-me span.text {
+
+    padding: 7px 15px;
+    line-height: 1.5em;
+    font-size: var(--font-size);
 }

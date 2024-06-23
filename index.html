@@ -17,51 +17,79 @@
                     <span>Loading....</span>
                 </div>
             </div>
-            <div class="me-content que hide">
-                <div class="top">
-                    <div class="search-filter tags">
-                        <input type="text" class="search-filter" placeholder="filter" />
-                    </div>
-                    <span class="all-tags link hide">show all tags</span>
-                    <div class="calender hide">
-                        <div class="sd-container">
-                            <input class="sd" type="date" id="date-picker" name="selected_date" />
-                            <span class="open-button">
-                                <button type="button">📅</button>
-                            </span>
+            <div class="home">
+                <div class="me-content que hide">
+                    <div class="top">
+                        <div class="search-filter tags">
+                            <input type="text" class="search-filter" placeholder="filter" />
                         </div>
-                        <span class="calendar-icon hide">📅</span>
-                        <input type="date" id="date-picker__" class="hide" />
+                        <span class="all-tags link hide">show all tags</span>
+
+                        <div class="calender hide">
+                            <div class="sd-container">
+                                <input class="sd" type="date" id="date-picker" name="selected_date" />
+                                <span class="open-button">
+                                    <button type="button">📅</button>
+                                </span>
+                            </div>
+                            <span class="calendar-icon hide">📅</span>
+                            <input type="date" id="date-picker__" class="hide" />
+                        </div>
+                        <i class="fa-solid fa-arrows-rotate refresh"></i>
+
+                        <i class="fa-solid fa-bars me-cp menu-icon menu right"></i>
+                        <div class="setting hide">
+                            <i class="fa-solid fa-bars"></i>
+                        </div>
                     </div>
-                    <i class="fa-regular fa-arrows-rotate refresh-icon"></i>
-                    <div class="setting hide">
-                        <i class="fa-solid fa-bars"></i>
+                    <div class="filtered-tags hide">
+                        <div class="tags">
+                            <input type="text" class="hide" />
+                        </div>
                     </div>
-                </div>
-                <div class="filtered-tags hide">
-                    <div class="tags">
-                        <input type="text" class="hide" />
-                    </div>
-                </div>
-                <div class="all-tags tags hide"></div>
-                <div class="filter-tags">
-                    <div class="tags"></div>
-                </div>
-                <div class="middle">
-                    <div class="prev-ques-list__"></div>
-                    <div class="que-text"></div>
-                    <div class="que-tags hide">
-                        <span class="label">Tags:</span>
+                    <div class="all-tags tags hide"></div>
+                    <div class="filter-tags">
                         <div class="tags"></div>
                     </div>
-                    <div class="que-expl"></div>
+                    <div class="middle">
+                        <div class="prev-ques-list__"></div>
+                        <div class="que-text"></div>
+                        <div class="que-tags hide">
+                            <span class="label">Tags:</span>
+                            <div class="tags"></div>
+                        </div>
+                        <div class="que-expl"></div>
+                    </div>
+                    <div class="bottom">
+                        <button class="new-question">New Question</button>
+                    </div>
+                    <div class="today-que-info">
+                        <span class="label">Today practised questions</span>
+                        <div class="prev-ques-list"></div>
+                    </div>
                 </div>
-                <div class="bottom">
-                    <button class="new-question">New Question</button>
+            </div>
+            <div class="about-me hide">
+                <div class="head">
+                    <h1>About me</h1>
+                    <span class="cross">X</span>
                 </div>
-                <div class="today-que-info">
-                    <span class="label">Today practised questions</span>
-                    <div class="prev-ques-list"></div>
+
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+                <div class="image">
+                    <img src="./assets/me.jpg" alt="" />
+                </div>
+                <h1 style="text-align: center; font-size: 25px">Mehboob Elahi</h1>
+                <div class="row social-media">
+                    <a href="https://facebook.com/mehboobelahi05" target="_blank" class="icon facebook"> <img src="./assets/facebook.png" /> </a>
+                    <a href="https://instagram.com/mehboobelahi05" target="_blank" class="icon x"><img src="./assets/instagram.png" /></a>
+                    <a href="https://twitter.com/mehboobelahi05" target="_blank" class="icon x"><img src="./assets/twitter.png" /></a>
+                    <a href="https://www.youtube.com/@mehboobelahi05/featured" target="_blank" class="icon youtube"><img src="./assets/youtube.png" /></a>
+                </div>
+
+                <div class="text">
+                    <span class="text">Hello everyone, I'm Mehboob Elahi from Kargil, Ladakh. I've developed this app to assist students preparing for exams like SSC, UPSC, NEET, and others. It aims to help them revise their study materials more effectively through practice questions. I hope you find it useful!</span>
+                    <span class="text">Thanks, and happy learning</span>
                 </div>
             </div>
             <span class="add-new-que hide">+</span>
@@ -83,6 +111,47 @@
                 </div>
 
                 <button class="add-que">Add</button>
+            </div>
+            <div class="mobile-tab overlay hide" id="tabOverlay">
+                <button id="closeMenu" class="close-button">&times;</button>
+                <div class="tab-container">
+                    <div class="tab home hide">
+                        <i class="fa-solid fa-home"></i>
+                        <span class="label">Home</span>
+                    </div>
+
+                    <div class="tab download">
+                        <i class="fa-solid fa-download download-icon"></i>
+                        <span class="label">Download User Data</span>
+                    </div>
+                    <div class="tab import">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span class="label">Import User Data</span>
+                    </div>
+                    <div class="tab person about-me">
+                        <i class="fa-solid fa-person"></i>
+                        <span class="label">About Me</span>
+                    </div>
+                    <div class="tab separator"></div>
+                    <div class="tab">
+                        <span class="label">Exam:</span>
+                        <select id="exam" name="exam">
+                            <option value="SSC">SSC</option>
+                            <option value="NEET" class="hide">NEET</option>
+                            <option value="UPSC" class="hide">UPSC</option>
+                            <option value="MY_CLASSES_AT">My DSSRB Classes 2024</option>
+                        </select>
+                    </div>
+                    <div class="tab">
+                        <span class="label">Mode:</span>
+                        <select id="exam" name="exam">
+                            <option value="mcq">MCQ</option>
+                            <option value="normal" class="hide">Normal</option>
+                        </select>
+                    </div>
+                    <button class="tab save">save</button>
+                    <div class="tab separator"></div>
+                </div>
             </div>
         </div>
 

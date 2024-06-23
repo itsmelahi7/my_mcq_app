@@ -67,7 +67,7 @@ function getCurrentTime() {
     const seconds = String(now.getSeconds()).padStart(2, "0");
     return `${hours}_${minutes}_${seconds}`;
 }
-document.querySelector(".refresh-icon").addEventListener("click", () => {
+document.querySelector("i.refresh").addEventListener("click", () => {
     location.reload(true);
     return;
     fil_ques = me_data;
@@ -745,6 +745,73 @@ function removePopupAlert() {
     if (x) x.remove();
 }
 
+document.querySelector(".tab.download").addEventListener("click", () => {
+    downloadUserData(user_data);
+});
+function downloadUserData(all_data) {
+    const jsonData = JSON.stringify(all_data, null, 4);
+    const fileName = "revise_app_user_data_" + getTodayDate() + "_" + getCurrentTime();
+    const blob = new Blob([jsonData], { type: "application/json" });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+
+    // Programmatically click the link to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    popupAlert("User data downloaded successfully");
+    // Remove the link element from the document
+    document.body.removeChild(link);
+}
+document.querySelector(".tab.import").addEventListener("click", () => {
+    importUserData();
+});
+function importUserData() {
+    // Create an input element of type 'file'
+    const input = document.createElement("input");
+    input.type = "file";
+
+    // Handle file selection change
+    input.onchange = function (e) {
+        const file = e.target.files[0];
+
+        if (!file) {
+            console.error("No file selected");
+            return;
+        }
+
+        // Initialize a new FileReader
+        const reader = new FileReader();
+
+        // Define onload event handler
+        reader.onload = function (event) {
+            try {
+                // Parse the JSON data
+                const importedData = JSON.parse(event.target.result);
+
+                // Assign imported data to user_data
+                user_data = importedData;
+
+                console.log("User data imported successfully:", user_data);
+                popupAlert("User data imported successfully");
+                saveDataInLocale("user_data", user_data);
+                setTimeout(() => {
+                    location.reload(true);
+                }, 2000);
+            } catch (error) {
+                console.error("Error parsing JSON file:", error);
+            }
+        };
+
+        // Read the file as text
+        reader.readAsText(file);
+    };
+
+    // Trigger click event to open file selector dialog
+    input.click();
+}
+
 function downloadJSON(all_data) {
     // Convert object array to JSON format
     const jsonData = JSON.stringify(all_data, null, 4);
@@ -816,3 +883,24 @@ function unselectSelectQuestionDot() {
     var div = document.querySelector(".prev-ques-list .prev-que.active");
     if (div) div.classList.remove("active");
 }
+
+document.querySelector("i.menu").addEventListener("click", function () {
+    document.querySelector("#tabOverlay").style.right = "0";
+    document.querySelector("#tabOverlay").classList.remove("hide");
+});
+
+document.querySelector("#closeMenu").addEventListener("click", function () {
+    document.querySelector("#tabOverlay").classList.add("hide");
+});
+
+document.querySelector(".tab.about-me").addEventListener("click", () => {
+    document.querySelector(".about-me").classList.remove("hide");
+    document.querySelector("#tabOverlay").classList.add("hide");
+    document.querySelector(".about-me").scrollIntoView({
+        behavior: "smooth", // Optional: Smooth scrolling behavior
+        block: "start", // Optional: Scroll to the top of the element
+    });
+});
+document.querySelector(".about-me span.cross").addEventListener("click", () => {
+    document.querySelector(".about-me").classList.add("hide");
+});

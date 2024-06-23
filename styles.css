@@ -384,7 +384,6 @@ span.all-tags {
     border: 0px solid gray;
     padding: 4px;
     border-radius: 34px;
-    background-color: red;
     width: 7px;
     height: 7px;
     margin: 3px;
@@ -396,4 +395,9 @@ span.all-tags {
 
 .prev-ques-list .prev-que.wrong-ans {
     background-color: #efaab1;
+}
+
+div.prev-que.active {
+    background-color: transparent;
+    border: 2px solid blue;
 }

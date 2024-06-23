@@ -10,12 +10,12 @@ var git_token = ""; // "ghp_XUplYMw_elahi_L0bgLAwvBBp_elahi_CVSXLcnF86on4g_elahi
 var user_data = [];
 
 //me_data = getDataFromLocale("myData");
-var gist_id = "1b59fd85ef6da4c753cc277887fe2b54"; // token gist file id
-var gist_filename = "token_gist.json"; // token gist filename
+//var gist_id = "1b59fd85ef6da4c753cc277887fe2b54"; // token gist file id
+//var gist_filename = "token_gist.json"; // token gist filename
 //getDataFromGit(gist_id, gist_filename, "git_token");
 
-gist_id = "4cb7b01ed98d271744b3cc662072b1ce"; // data gist file id
-gist_filename = "my_mcq_app_data.json"; // data gist file name
+var gist_id = "4cb7b01ed98d271744b3cc662072b1ce"; // data gist file id
+var gist_filename = "my_mcq_app_data.json"; // data gist file name
 //gist_id = "7cef8dc981526e334218005a93e61598"; //testing_code
 //gist_filename = "test_my_mcq_app_data.json"; // testing_code
 getDataFromGit(gist_id, gist_filename, "me_data");
@@ -37,23 +37,36 @@ function initialLoading() {
     saveDataInLocale("me_admin", true);
     me_admin = getDataFromLocale("me_admin");
 
+    user_data = getDataFromLocale("user_data");
+    if (user_data == null) user_data = [];
+    if (user_data.length != 0) {
+        user_data[0].today_practice_questions.forEach((que) => {
+            addTodatPracticeQuestionDot(que);
+        });
+    }
+
     //
     if (false) {
         var span1 = document.querySelector("span.add-new-que");
         span1.classList.remove("hide");
         /* span1.addEventListener("click", () => {
-            debugger;
+            
             document.querySelector("div.add-que").classList.toggle("hide");
         }); */
         document.body.addEventListener("click", (event) => {
             if (event.target === span1) {
-                debugger;
                 document.querySelector("div.add-que").classList.toggle("hide");
             }
         });
     }
 }
-
+function getCurrentTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    return `${hours}_${minutes}_${seconds}`;
+}
 document.querySelector(".refresh-icon").addEventListener("click", () => {
     location.reload(true);
     return;
@@ -72,6 +85,7 @@ document.querySelector("button.update-gist").addEventListener("click", () => {
 });
 
 document.querySelector("button.new-question").addEventListener("click", () => {
+    unselectSelectQuestionDot();
     ++curr_que;
     if (curr_que == fil_ques.length) {
         curr_que = 0;
@@ -326,18 +340,48 @@ function displayQuestion(que) {
             div.textContent = "";
             document.querySelector("div.prev-ques-list").append(div);
 
+            if (user_data.length == 0 || user_data[0].date != getTodayDate()) {
+                var obj = {
+                    date: getTodayDate(),
+                    today_practice_questions: [],
+                };
+                user_data.unshift(obj);
+                console.log("todays object created for user_data");
+            }
+
+            var que_obj = {
+                que_id: que.id,
+                selected_option_id: "",
+                answer_option_id: "",
+                time: getCurrentTime(),
+            };
+
             if (span.classList.contains("ans")) {
                 span.classList.add("correct-ans");
                 div.classList.add("correct-ans");
                 div.setAttribute("answer-opt", span.id);
+                que_obj.answer_option_id = span.id;
             } else {
                 span.classList.add("wrong-ans");
                 div.classList.add("wrong-ans");
                 div.setAttribute("answer-opt", span.id);
+                que_obj.answer_option_id = span.id;
             }
+            // Add 'correct-ans' class to the span with the 'ans' class
+            document.querySelectorAll(".option").forEach((optionSpan) => {
+                if (optionSpan.classList.contains("ans")) {
+                    optionSpan.classList.add("correct-ans");
+                    div.setAttribute("selected-opt", optionSpan.id);
+                    que_obj.selected_option_id = optionSpan.id;
+                }
+            });
+            user_data[0].today_practice_questions.push(que_obj);
+            saveDataInLocale("user_data", user_data);
+            document.querySelectorAll(".option").forEach((optionSpan) => {
+                optionSpan.classList.add("disabled");
+            });
 
             div.addEventListener("click", (event) => {
-                debugger;
                 var div = event.target;
                 var que_id = div.getAttribute("id");
                 var selected_option_id = div.getAttribute("selected-opt");
@@ -359,18 +403,6 @@ function displayQuestion(que) {
                     });
                 }
                 //}, 1000);
-            });
-
-            // Add 'correct-ans' class to the span with the 'ans' class
-            document.querySelectorAll(".option").forEach((optionSpan) => {
-                if (optionSpan.classList.contains("ans")) {
-                    optionSpan.classList.add("correct-ans");
-                    div.setAttribute("selected-opt", optionSpan.id);
-                }
-            });
-
-            document.querySelectorAll(".option").forEach((optionSpan) => {
-                optionSpan.classList.add("disabled");
             });
         });
         options.appendChild(span);
@@ -528,7 +560,7 @@ async function getDataFromGit(id, filename, type) {
                     initialLoading();
                 }
                 saveDataInLocale("me_data");
-                initialLoading();
+                //initialLoading();
             } else {
                 return;
                 console.error("File not found in the Gist.");
@@ -729,4 +761,50 @@ function downloadJSON(all_data) {
 
     // Remove the link element from the document
     document.body.removeChild(link);
+}
+
+function addTodatPracticeQuestionDot(que) {
+    debugger;
+    var div = document.createElement("div");
+    div.className = "prev-que me-cp";
+    div.id = que.que_id;
+    div.setAttribute("answer-opt", que.answer_option_id);
+    div.setAttribute("selected-opt", que.selected_option_id);
+    div.textContent = "";
+    if (que.answer_option_id == que.selected_option_id) {
+        div.classList.add("correct-ans");
+    } else {
+        div.classList.add("wrong-ans");
+    }
+    document.querySelector("div.prev-ques-list").append(div);
+    div.addEventListener("click", (event) => {
+        unselectSelectQuestionDot();
+        var div = event.target;
+        div.classList.add("active");
+        var que_id = div.getAttribute("id");
+        var selected_option_id = div.getAttribute("selected-opt");
+        var answer_option_id = div.getAttribute("answer-opt");
+        var que = getQuestionById(que_id);
+        displayQuestion(que);
+        //setTimeout(() => {
+        var options = document.querySelectorAll("div.que-text .options .option");
+        options.forEach((option) => {
+            if (option.id == answer_option_id) {
+                option.className = "option me-cp correct-ans disabled";
+            }
+        });
+        if (selected_option_id != answer_option_id) {
+            options.forEach((option) => {
+                if (option.id == selected_option_id) {
+                    option.className = "option me-cp wrong-ans disabled";
+                }
+            });
+        }
+        //}, 1000);
+    });
+}
+
+function unselectSelectQuestionDot() {
+    var div = document.querySelector(".prev-ques-list .prev-que.active");
+    if (div) div.classList.remove("active");
 }

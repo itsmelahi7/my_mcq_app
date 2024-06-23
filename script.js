@@ -334,11 +334,14 @@ function displayQuestion(que) {
         }
         span.addEventListener("click", function () {
             // Check if the clicked span contains the 'ans' class
+
+            /*
             var div = document.createElement("div");
             div.className = "prev-que me-cp";
             div.id = que.id;
             div.textContent = "";
             document.querySelector("div.prev-ques-list").append(div);
+            */
 
             if (user_data.length == 0 || user_data[0].date != getTodayDate()) {
                 var obj = {
@@ -358,29 +361,31 @@ function displayQuestion(que) {
 
             if (span.classList.contains("ans")) {
                 span.classList.add("correct-ans");
-                div.classList.add("correct-ans");
-                div.setAttribute("answer-opt", span.id);
+                //div.classList.add("correct-ans");
+                //div.setAttribute("answer-opt", span.id);
                 que_obj.answer_option_id = span.id;
             } else {
                 span.classList.add("wrong-ans");
-                div.classList.add("wrong-ans");
-                div.setAttribute("answer-opt", span.id);
+                //div.classList.add("wrong-ans");
+                //div.setAttribute("answer-opt", span.id);
                 que_obj.answer_option_id = span.id;
             }
             // Add 'correct-ans' class to the span with the 'ans' class
             document.querySelectorAll(".option").forEach((optionSpan) => {
                 if (optionSpan.classList.contains("ans")) {
                     optionSpan.classList.add("correct-ans");
-                    div.setAttribute("selected-opt", optionSpan.id);
+                    //div.setAttribute("selected-opt", optionSpan.id);
                     que_obj.selected_option_id = optionSpan.id;
                 }
             });
             user_data[0].today_practice_questions.push(que_obj);
             saveDataInLocale("user_data", user_data);
+            addTodatPracticeQuestionDot(user_data[0].today_practice_questions.slice(-1)[0]); // last or recent today practise question
             document.querySelectorAll(".option").forEach((optionSpan) => {
                 optionSpan.classList.add("disabled");
             });
 
+            /*
             div.addEventListener("click", (event) => {
                 var div = event.target;
                 var que_id = div.getAttribute("id");
@@ -404,6 +409,7 @@ function displayQuestion(que) {
                 }
                 //}, 1000);
             });
+            */
         });
         options.appendChild(span);
     });
@@ -777,6 +783,8 @@ function addTodatPracticeQuestionDot(que) {
         div.classList.add("wrong-ans");
     }
     document.querySelector("div.prev-ques-list").append(div);
+    document.querySelector("div.today-que-info span.label").textContent = `Today practised questions (${user_data[0].today_practice_questions.length}):`;
+
     div.addEventListener("click", (event) => {
         unselectSelectQuestionDot();
         var div = event.target;

@@ -1,3 +1,8 @@
+:root {
+    --span-lavel-color: #868686;
+    --border-line-gray-color: #cbcbcb;
+}
+
 * {
     font-family: "Inter", sans-serif;
     font-size: 1em;
@@ -55,7 +60,7 @@ span.option {
 
 div.middle {
     border-top: 3px solid #cbcbcb;
-    border-bottom: 3px solid #cbcbcb;
+    border-bottom: 0px solid #cbcbcb;
     padding-bottom: 21px;
 }
 
@@ -400,4 +405,16 @@ span.all-tags {
 div.prev-que.active {
     background-color: transparent;
     border: 2px solid blue;
+}
+
+div.today-que-info {
+    border-top: 3px solid #cbcbcb;
+    border-bottom: 3px solid #cbcbcb;
+    margin: 15px 0px;
+    padding: 10px 0px;
+}
+
+div.today-que-info span.label {
+    color: var(--span-lavel-color);
+    margin: 10px 20px;
 }

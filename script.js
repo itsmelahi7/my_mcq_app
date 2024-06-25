@@ -19,7 +19,6 @@ var gist_filename = "my_mcq_app_data.json"; // data gist file name
 //gist_id = "7cef8dc981526e334218005a93e61598"; //testing_code
 //gist_filename = "test_my_mcq_app_data.json"; // testing_code
 var isOnline = checkInternetConnection();
-debugger;
 if (isOnline) {
     getDataFromGit(gist_id, gist_filename, "me_data");
 } else {
@@ -100,6 +99,9 @@ document.querySelector("button.new-question").addEventListener("click", () => {
     }
     displayQuestion();
 });
+function escapeCSSSelector(id) {
+    return id.replace(/([ #;&,.+*~':"!^$[\]()=>|/@])/g, "\\$1").replace(/^([0-9])/g, "\\3$1 ");
+}
 
 document.querySelector("button.add-que").addEventListener("click", () => {
     /* var obj = {
@@ -279,15 +281,21 @@ function sortArrayRandomly(arr) {
     return arr;
 }
 
-function displayQuestion(que) {
+function displayQuestion(que, que_text_target_ele, type) {
     if (!que) que = fil_ques[curr_que];
+    if (!que_text_target_ele) que_text_target_ele = document.querySelector(".middle .que-text");
+    if (type != "all") que_text_target_ele.innerHTML = "";
 
-    var que_text = document.querySelector(".que-text");
-    que_text.innerHTML = "";
+    var que_div = document.createElement("div");
+    que_div.className = "que-div";
+    que_div.id = que.id;
+    que_text_target_ele.appendChild(que_div);
+
     var que_count = document.createElement("span");
     que_count.className = "que-count hide";
     que_count.textContent = curr_que + 1 + "/" + fil_ques.length;
-    que_text.appendChild(que_count);
+    que_div.appendChild(que_count);
+
     if (fil_ques.length == 0) {
         que_count.className = "que-count";
         que_count.textContent = "No question found...!";
@@ -296,7 +304,7 @@ function displayQuestion(que) {
 
     var span = document.createElement("span");
     span.className = "question";
-    que_text.appendChild(span);
+    que_div.appendChild(span);
     span.textContent = "Q. " + que.question;
 
     if (que_mode == "normal") {
@@ -325,7 +333,7 @@ function displayQuestion(que) {
 
     var options = document.createElement("div");
     options.className = "options";
-    que_text.appendChild(options);
+    que_div.appendChild(options);
 
     shuffleArray(que.options);
 
@@ -427,6 +435,7 @@ function displayQuestion(que) {
     });
     var tag_target = document.querySelector(".que-tags .tags");
     displayTags(que.tags, tag_target);
+    return que_div;
 }
 
 function displayTags(tag_array, tag_target) {
@@ -581,7 +590,6 @@ async function getDataFromGit(id, filename, type) {
                 //saveDataInLocale("me_data");
                 //initialLoading();
             } else {
-                return;
                 console.error("File not found in the Gist.");
                 var data = getDataFromLocale("me_data");
                 if (data) initialLoading();
@@ -589,7 +597,7 @@ async function getDataFromGit(id, filename, type) {
         })
         .catch((error) => {
             console.error("Error getting data from the Gist:", error);
-            return;
+
             var data = getDataFromLocale("me_data");
             if (data) initialLoading();
         });
@@ -849,14 +857,51 @@ function downloadJSON(all_data) {
     document.body.removeChild(link);
 }
 
+function displayAllQuestion() {
+    document.querySelector(".today-que-info .link.show-all").click();
+}
+document.querySelector(".today-que-info .link.show-all").addEventListener("click", (event) => {
+    document.querySelector(".today-que-info .que-text").classList.add("hide");
+    var target = document.querySelector(".today-que-info .all-que-text");
+    target.classList.remove("hide");
+
+    document.querySelector(".today-que-info .link.remove-que").classList.remove("hide");
+    document.querySelector(".today-que-info .link.remove-que").addEventListener("click", (event) => {
+        document.querySelector(".today-que-info .que-text").classList.add("hide");
+        document.querySelector(".today-que-info .all-que-text").classList.add("hide");
+        //div.classList.remove("active");
+        document.querySelector(".today-que-info .link.remove-que").classList.add("hide");
+        return;
+    });
+
+    user_data[0].today_practice_questions.forEach((que, index) => {
+        var que_obj = getQuestionById(que.que_id);
+        var que_div = displayQuestion(que_obj, target, "all");
+        que_div.querySelector("span.question").textContent = "Q" + (index + 1) + ". " + que_obj.question;
+        var options = que_div.querySelectorAll(".options .option");
+        options.forEach((option) => {
+            if (option.id == que.answer_option_id) {
+                option.className = "option me-cp correct-ans disabled";
+            }
+        });
+        if (que.selected_option_id != que.answer_option_id) {
+            options.forEach((option) => {
+                if (option.id == que.selected_option_id) {
+                    option.className = "option me-cp wrong-ans disabled";
+                }
+            });
+        }
+    });
+});
+
 function addTodatPracticeQuestionDot(que) {
-    debugger;
     var div = document.createElement("div");
     div.className = "prev-que me-cp";
     div.id = que.que_id;
     div.setAttribute("answer-opt", que.answer_option_id);
     div.setAttribute("selected-opt", que.selected_option_id);
-    div.textContent = "";
+    div.textContent = document.querySelectorAll(".prev-ques-list .prev-que").length + 1;
+
     if (que.answer_option_id == que.selected_option_id) {
         div.classList.add("correct-ans");
     } else {
@@ -866,14 +911,53 @@ function addTodatPracticeQuestionDot(que) {
     document.querySelector("div.today-que-info span.label").textContent = `Today practised questions (${user_data[0].today_practice_questions.length}):`;
 
     div.addEventListener("click", (event) => {
-        unselectSelectQuestionDot();
         var div = event.target;
+        document.querySelector(".today-que-info .all-que-text").innerHTML = "";
+        displayAllQuestion();
+        var is_all_ques_open = document.querySelector(".today-que-info .all-que-text.hide");
+        if (!is_all_ques_open) {
+            debugger;
+            var id = div.id;
+
+            id = escapeCSSSelector(id);
+            var ele = document.querySelector(`div.all-que-text #${id}`);
+
+            ele.scrollIntoView({
+                behavior: "smooth", // Optional: Smooth scrolling behavior
+                block: "start", // Optional: Scroll to the top of the element
+            });
+            ele.style.backgroundColor = "#f6cb8b";
+            setTimeout(() => {
+                ele.style.backgroundColor = "";
+            }, 3000);
+            return;
+        }
+        if (div.classList.contains("active")) {
+            document.querySelector(".today-que-info .que-text").classList.add("hide");
+            div.classList.remove("active");
+            document.querySelector(".today-que-info .link.remove-que").classList.add("hide");
+            return;
+        }
+        document.querySelector(".today-que-info .que-text").classList.remove("hide");
+
+        document.querySelector(".today-que-info .link.remove-que").classList.remove("hide");
+        document.querySelector(".today-que-info .link.remove-que").addEventListener("click", (event) => {
+            document.querySelector(".today-que-info .que-text").classList.add("hide");
+            document.querySelector(".today-que-info .all-que-text").classList.add("hide");
+            //div.classList.remove("active");
+            document.querySelector(".today-que-info .link.remove-que").classList.add("hide");
+            return;
+        });
+        unselectSelectQuestionDot();
+
         div.classList.add("active");
         var que_id = div.getAttribute("id");
         var selected_option_id = div.getAttribute("selected-opt");
         var answer_option_id = div.getAttribute("answer-opt");
         var que = getQuestionById(que_id);
-        displayQuestion(que);
+        var target = document.querySelector(".today-que-info .que-text");
+
+        displayQuestion(que, target);
         //setTimeout(() => {
         var options = document.querySelectorAll("div.que-text .options .option");
         options.forEach((option) => {

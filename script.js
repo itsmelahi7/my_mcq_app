@@ -1018,3 +1018,20 @@ function copyToClipboard(text) {
     // Remove the temporary input element
     document.body.removeChild(input);
 }
+
+function clearCache(){
+// Reload CSS files with a cache-busting query parameter
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            links.forEach(link => {
+                link.href = link.href.split('?')[0] + '?cache_bust=' + new Date().getTime();
+            });
+
+            // Reload JavaScript files with a cache-busting query parameter
+            const scripts = document.querySelectorAll('script[src]');
+            scripts.forEach(script => {
+                const newScript = document.createElement('script');
+                newScript.src = script.src.split('?')[0] + '?cache_bust=' + new Date().getTime();
+                script.parentNode.replaceChild(newScript, script);
+            });
+}
+function clearCache();

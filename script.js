@@ -1034,4 +1034,4 @@ function clearCache(){
                 script.parentNode.replaceChild(newScript, script);
             });
 }
-function clearCache();
+clearCache();
